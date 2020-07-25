@@ -1,6 +1,7 @@
 package ghttp
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -24,6 +25,19 @@ func JSON(req *http.Request, v interface{}) error {
 func FormJSON(req *http.Request, data url.Values, v interface{}) error {
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Body = ioutil.NopCloser(strings.NewReader(data.Encode()))
+
+	return JSON(req, v)
+}
+
+func JSONJSON(req *http.Request, data interface{}, v interface{}) error {
+	req.Header.Set("Content-Type", "application/json")
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	req.Body = ioutil.NopCloser(bytes.NewReader(b))
 
 	return JSON(req, v)
 }
