@@ -45,3 +45,7 @@ func JSONJSON(req *http.Request, data interface{}, v interface{}) error {
 func Success(statusCode int) bool {
 	return statusCode >= http.StatusOK && statusCode < http.StatusMultipleChoices
 }
+
+func NewRequest(method, url string) (*http.Request, error) {
+	return http.NewRequest(method, url, nil)
+}
