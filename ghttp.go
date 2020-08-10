@@ -2,6 +2,7 @@ package ghttp
 
 import (
 	"bytes"
+	"fmt"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -46,6 +47,19 @@ func Success(statusCode int) bool {
 	return statusCode >= http.StatusOK && statusCode < http.StatusMultipleChoices
 }
 
+func NewAuthRequest(method, url, token string) (*http.Request, error) {
+	req, err := NewRequest(method, url)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	return req, nil
+}
+
+// TODO: basic auth request
+
 func NewRequest(method, url string) (*http.Request, error) {
 	return http.NewRequest(method, url, nil)
 }
+
