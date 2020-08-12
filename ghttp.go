@@ -27,7 +27,7 @@ func JSON(req *http.Request, v interface{}) error {
 	defer res.Body.Close()
 
 	if err := json.NewDecoder(res.Body).Decode(v); err != nil {
-		return fmt.Errorf("JSON Decoder error: %s", err)
+		return fmt.Errorf("JSON Decoder error after %s %s: %s", res.Proto, res.Status, err)
 	}
 
 	return nil
