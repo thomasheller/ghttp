@@ -14,6 +14,8 @@ func JSON(req *http.Request, v interface{}) error {
 	client := http.Client{}
 	// client := http.Client{Timeout: time.Second * 10} // TODO
 
+	log.Printf("JSON request: %v", req)
+
 	res, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("http.Client.Do error: %s", err)
