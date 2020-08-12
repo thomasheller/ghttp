@@ -15,7 +15,9 @@ func JSON(req *http.Request, v interface{}) error {
 	client := http.Client{}
 	// client := http.Client{Timeout: time.Second * 10} // TODO
 
-	log.Printf("JSON request: %v", req)
+	if req.URL.Host != "api.telegram.org" {
+		log.Printf("JSON request: %v", req) // TODO: ?
+	}
 
 	res, err := client.Do(req)
 	if err != nil {
