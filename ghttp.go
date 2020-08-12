@@ -2,8 +2,8 @@ package ghttp
 
 import (
 	"bytes"
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -16,11 +16,16 @@ func JSON(req *http.Request, v interface{}) error {
 
 	res, err := client.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("http.Client.Do error: %s", err)
 	}
 
 	defer res.Body.Close()
-	return json.NewDecoder(res.Body).Decode(v)
+
+	if err := json.NewDecoder(res.Body).Decode(v); err != nil {
+		return fmt.Errorf("JSON Decoder error: %s", err)
+	}
+
+	return nil
 }
 
 func FormJSON(req *http.Request, data url.Values, v interface{}) error {
@@ -35,7 +40,7 @@ func JSONJSON(req *http.Request, data interface{}, v interface{}) error {
 
 	b, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return fmt.Errorf("JSON marshal error: %s", err)
 	}
 
 	req.Body = ioutil.NopCloser(bytes.NewReader(b))
@@ -62,4 +67,3 @@ func NewAuthRequest(method, url, token string) (*http.Request, error) {
 func NewRequest(method, url string) (*http.Request, error) {
 	return http.NewRequest(method, url, nil)
 }
-
